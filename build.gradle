@@ -35,7 +35,6 @@ sonar {
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.java.libraries", "build/libs/**/*.jar"
         property "sonar.sources", "src/main/java"
-        property "sonar.tests", "src/test/java"
         property "property.login", "50a98b4b5e458e9b9ed707de3566b045fc37fec4"
 
         property "sonar.skipCompile", "true"
