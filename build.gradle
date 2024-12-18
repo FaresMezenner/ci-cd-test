@@ -17,14 +17,16 @@ repositories {
 
 
 dependencies {
+    testImplementation 'io.cucumber:cucumber-java:6.0.0'
+    testImplementation 'io.cucumber:cucumber-junit:6.0.0'
     testImplementation 'junit:junit:4.12'
 
 }
 
 
-tasks.test {
-    finalizedBy project.tasks["sonar"]
-}
+//tasks.test {
+//    finalizedBy project.tasks["sonar"]
+//}
 
 //sonar {
 //
@@ -32,12 +34,11 @@ tasks.test {
 //        property "sonar.projectKey", "mezenner-ci-cd"
 //        property "sonar.host.url", "http://197.140.142.82:9000/"
 //        property "sonar.scm.disabled", "true"
-//        property "sonar.java.binaries", "./build/classes/java/main"
-//        property "sonar.java.libraries", "./build/libs/**/*.jar"
-//        property "sonar.sources", "./src/main/java"
+//        property "sonar.java.binaries", "build/classes/java/main"
+//        property "sonar.java.libraries", "build/libs/**/*.jar"
+//        property "sonar.sources", "src/main/java"
+//        property "sonar.tests", "src/test/java"
 //        property "property.login", "50a98b4b5e458e9b9ed707de3566b045fc37fec4"
-//
-//        property "sonar.skipCompile", "true"
 //    }
 //}
 
