@@ -31,6 +31,8 @@ jacocoTestReport {
 
 
 
+
+
 dependencies {
     testImplementation 'io.cucumber:cucumber-java:6.10.4'
     testImplementation 'io.cucumber:cucumber-junit:6.10.4'
@@ -69,7 +71,12 @@ publishing {
         }
     }
 }
+
+
 test {
     finalizedBy jacocoTestReport // Ensure test runs before generating the report
+
+
+
     systemProperty "cucumber.plugin", "json:build/reports/cucumber/cucumber.json"
 }
