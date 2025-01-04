@@ -13,6 +13,19 @@ repositories {
 }
 
 
+java {
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+
+    }
+
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+}
+
 
 
 
@@ -32,13 +45,15 @@ sonar {
 
     properties {
         property "sonar.projectKey", "mezenner-ci-cd"
-        property "sonar.host.url", "http://197.140.142.82:9000/"
+        property "sonar.host.url", "http://localhost:9000/"
 //        property "sonar.scm.disabled", "true"
-//        property "sonar.java.binaries", "build/classes/java/main"
-//        property "sonar.java.libraries", "build/libs/**/*.jar"
+        property "sonar.java.binaries", "build/classes/java/main"
+        property "sonar.java.libraries", "build/libs/**/*.jar"
         property "sonar.sources", "src/main/java"
 //        property "sonar.tests", "src/test/java"
 //        property "property.login", "50a98b4b5e458e9b9ed707de3566b045fc37fec4"
+        property "sonar.login", "admin"
+        property "sonar.password", "Mezenner_2003"
     }
 }
 
