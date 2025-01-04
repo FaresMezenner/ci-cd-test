@@ -2,6 +2,7 @@ plugins {
     id 'java'
 
     id 'maven-publish'
+    id 'jacoco'
     id "org.sonarqube" version "4.4.0.3356"
 }
 
@@ -13,6 +14,13 @@ repositories {
 }
 
 
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = false
+        html.outputLocation = html.outputLocation = layout.buildDirectory.dir("reports/jacoco")
+    }
+}
 
 
 
@@ -20,26 +28,19 @@ repositories {
 dependencies {
     testImplementation 'io.cucumber:cucumber-java:6.0.0'
     testImplementation 'io.cucumber:cucumber-junit:6.0.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.1'
 
 }
 
-
-//tasks.test {
-//    finalizedBy project.tasks["sonar"]
-//}
 
 sonar {
 
     properties {
         property "sonar.projectKey", "mezenner-ci-cd"
         property "sonar.host.url", "http://localhost:9000/"
-//        property "sonar.scm.disabled", "true"
         property "sonar.java.binaries", "build/classes/java/main"
-        property "sonar.java.libraries", "build/libs/**/*.jar"
         property "sonar.sources", "src/main/java"
-//        property "sonar.tests", "src/test/java"
-//        property "property.login", "50a98b4b5e458e9b9ed707de3566b045fc37fec4"
+        property "sonar.tests", "src/test/java"
         property "sonar.login", "admin"
         property "sonar.password", "Mezenner_2003"
     }
@@ -61,4 +62,8 @@ publishing {
             from components.java
         }
     }
+}
+test {
+    finalizedBy jacocoTestReport // Ensure test runs before generating the report
+    systemProperty "cucumber.plugin", "json:build/reports/cucumber/cucumber.json"
 }
