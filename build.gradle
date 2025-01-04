@@ -13,11 +13,6 @@ repositories {
     mavenCentral()
 }
 
-configurations {
-    cucumberRuntime {
-        extendsFrom testImplementation
-    }
-}
 
 
 jacocoTestReport {
