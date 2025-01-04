@@ -71,7 +71,5 @@ publishing {
 test {
     finalizedBy jacocoTestReport // Ensure test runs before generating the report
 
-
-
     systemProperty "cucumber.plugin", "json:build/reports/cucumber/cucumber.json"
 }
