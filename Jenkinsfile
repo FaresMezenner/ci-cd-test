@@ -14,7 +14,8 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    sh './gradlew :test --tests "acceptation.DeterminantCalculatorFeature"'
+
+                    sh './gradlew test --tests "acceptation.DeterminantCalculatorFeature"'
                 }
             }
             post {
