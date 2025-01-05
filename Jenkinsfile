@@ -69,8 +69,7 @@ pipeline {
                       mail(
                           to: 'faresmezenner@gmail.com',
                           subject: 'Deployment Success - Project mezenner-ci-cd',
-                          body: 'The deployment for the project mezenner-ci-cd was successful.',
-                          attachLog: true
+                          body: 'The deployment for the project mezenner-ci-cd was successful.'
                       )
 
                       // Slack Notification for Successful Deployment
@@ -85,8 +84,7 @@ pipeline {
                       mail(
                           to: 'faresmezenner@gmail.com',
                           subject: 'Pipeline Failed - Project mezenner-ci-cd',
-                          body: 'The Jenkins pipeline for project mezenner-ci-cd has failed. Please check the logs for more details.',
-                          attachLog: true
+                          body: 'The Jenkins pipeline for project mezenner-ci-cd has failed. Please check the logs for more details.'
                       )
 
                       // Slack Notification for Pipeline Failure
