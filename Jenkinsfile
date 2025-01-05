@@ -6,6 +6,7 @@ pipeline {
                 mail bcc: '', body: 'Test', subject: 'Test', to: 'faresmezenner@gmail.com'
             }
         }
+
         stage('Test') {
             steps {
                 script {
