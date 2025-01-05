@@ -21,5 +21,15 @@ pipeline {
                 sh './gradlew sonar'
             }
         }
+        stage('Code Quality') {
+             steps {
+                 script {
+                     def qualityGate = waitForQualityGate() // Wait for SonarQube's analysis result
+                     if (qualityGate.status != 'OK') {
+                         error "Pipeline failed due to Quality Gate failure: ${qualityGate.status}"
+                     }
+                 }
+             }
+         }
     }
 }
