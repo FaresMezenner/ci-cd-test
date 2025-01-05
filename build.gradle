@@ -44,8 +44,7 @@ sonar {
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java"
-        property "sonar.login", "admin"
-        property "sonar.password", "Mezenner_2003"
+        property "sonar.token", "squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd"
     }
 }
 
