@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('Hello') {
+            steps {
+                mail bcc: '', body: 'Test', subject: 'Test', to: 'faresmezenner@gmail.com'
+            }
+        }
         stage('Test') {
             steps {
                 script {
