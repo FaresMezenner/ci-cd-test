@@ -1,16 +1,6 @@
 pipeline {
     agent any
     stages {
-//         stage('SonarQube') {
-//             steps {
-//                 sh './gradlew sonar'
-//             }
-//         }
-        stage('test') {
-            steps {
-                echo 'Hello World 5'
-            }
-        }
         stage('Test') {
             steps {
                 script {
@@ -24,6 +14,11 @@ pipeline {
                     junit 'build/test-results/test/*.xml'
                     cucumber 'build/reports/cucumber/*.json'
                 }
+            }
+        }
+        stage('SonarQube') {
+            steps {
+                sh './gradlew sonar'
             }
         }
     }
