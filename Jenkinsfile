@@ -3,6 +3,22 @@ pipeline {
     stages {
 
 
+        stage('Test') {
+            steps {
+                script {
+
+                    sh './gradlew test --tests "acceptation.DeterminantCalculatorFeature"'
+                    sh './gradlew test'
+                }
+            }
+            post {
+                always {
+                    junit 'build/test-results/test/*.xml'
+                    cucumber 'build/reports/cucumber/*.json'
+                }
+            }
+        }
+
         stage('SonarQube') {
             steps {
                 // Use the SonarQube environment wrapper
@@ -12,8 +28,44 @@ pipeline {
             }
         }
 
+        stage('Code Quality') {
+             steps {
+                 script {
+                     def qualityGate = waitForQualityGate() // Wait for SonarQube's analysis result
+//                      if (qualityGate.status != 'OK') {
+//                          error "Pipeline failed due to Quality Gate failure: ${qualityGate.status}"
+//                      }
+                 }
+             }
+         }
+         stage('Build') {
+             steps {
+                 script {
+                     // Generate the JAR file
+                     sh './gradlew jar'
+
+                     // Generate the documentation
+                     sh './gradlew javadoc'
+                 }
+             }
+             post {
+                 success {
+                     // Archive the generated JAR and documentation
+                     archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
+                     archiveArtifacts artifacts: 'build/docs/javadoc/**/*', fingerprint: true
+                 }
+             }
+         }
+             stage('Deploy') {
+                 steps {
+                     script {
+                         sh './gradlew publish'
+                     }
+                 }
+             }
     }
-    post {success {
+    post {
+    success {
                       // Email Notification for Successful Deployment
                       mail(
                           to: 'faresmezenner@gmail.com',
