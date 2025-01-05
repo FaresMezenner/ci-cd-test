@@ -67,6 +67,7 @@ publishing {
 }
 
 
+
 test {
     finalizedBy jacocoTestReport // Ensure test runs before generating the report
 
