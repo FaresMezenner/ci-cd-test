@@ -52,6 +52,13 @@ pipeline {
                      archiveArtifacts artifacts: 'build/docs/javadoc/**/*', fingerprint: true
                  }
              }
+             stage('Deploy') {
+                 steps {
+                     script {
+                         sh './gradlew publish'
+                     }
+                 }
+             }
          }
     }
 }
