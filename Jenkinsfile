@@ -75,7 +75,7 @@ pipeline {
 
             // Slack Notification for Successful Deployment
             slackSend(
-                channel: '#development',
+                channel: '#tp-jinkins',
                 message: 'Deployment succeeded for project mezenner-ci-cd!'
             )
 
@@ -90,7 +90,7 @@ pipeline {
 
             // Slack Notification for Pipeline Failure
             slackSend(
-                channel: '#development',
+                channel: '#tp-jinkins',
                 message: 'Pipeline failed for project mezenner-ci-cd. Check Jenkins for details!'
             )
                   }
