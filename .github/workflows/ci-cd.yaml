@@ -17,12 +17,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important for SonarQube analysis
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -54,18 +64,33 @@ jobs:
       - name: SonarQube Analysis
         env:
           SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
+          SONAR_HOST_URL: https://5fac-129-45-20-38.ngrok-free.app/
         run: |
-          ./gradlew sonar \
-            -Dsonar.projectKey=mezenner-ci-cd \
-            -Dsonar.host.url=https://5fac-129-45-20-38.ngrok-free.app/ \
+          ./gradlew sonarqube \
+          -Dsonar.projectKey=your-project-key \
+          -Dsonar.host.url=https://5fac-129-45-20-38.ngrok-free.app/ \
+          -Dsonar.login=squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd \
+          -Dsonar.qualitygate.wait=true
 
-      - name: SonarQube Quality Gate
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
-        with:
-          scanMetadataReportFile: .scannerwork/report-task.txt
+      - name: SonarQube Quality Gate Check
+        run: |
+          REPORT_PATH=".scannerwork/report-task.txt"
+          if [ ! -f "$REPORT_PATH" ]; then
+            echo "Error: SonarQube report not found at $REPORT_PATH"
+            exit 1
+          fi
+          
+          SERVER_URL=$(cat $REPORT_PATH | grep serverUrl= | cut -d '=' -f2)
+          CE_TASK_ID=$(cat $REPORT_PATH | grep ceTaskId= | cut -d '=' -f2)
+          
+          # Wait for analysis to complete and get quality gate status
+          STATUS=$(curl -u "${{ secrets.SONAR_TOKEN }}:" "${SERVER_URL}/api/qualitygates/project_status?analysisId=${CE_TASK_ID}" | jq -r '.projectStatus.status')
+          
+          if [ "$STATUS" != "OK" ]; then
+            echo "Quality Gate failed with status: $STATUS"
+            exit 1
+          fi
+          echo "Quality Gate passed successfully"
 #
 #      - name: Build
 #        run: |
