@@ -58,14 +58,14 @@ jobs:
           ./gradlew sonar \
             -Dsonar.projectKey=mezenner-ci-cd \
             -Dsonar.host.url=https://5fac-129-45-20-38.ngrok-free.app/ \
-#
-#      - name: SonarQube Quality Gate
-#        uses: sonarsource/sonarqube-quality-gate-action@master
-#        timeout-minutes: 5
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#        with:
-#          scanMetadataReportFile: .scannerwork/report-task.txt
+
+      - name: SonarQube Quality Gate
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
+        with:
+          scanMetadataReportFile: .scannerwork/report-task.txt
 #
 #      - name: Build
 #        run: |
