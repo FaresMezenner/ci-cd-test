@@ -120,13 +120,13 @@ jobs:
           subject: ${{ job.status == 'success' && 'Deployment Success - Project mezenner-ci-cd' || 'Pipeline Failed - Project mezenner-ci-cd' }}
           to: faresmezenner@gmail.com
           body: ${{ job.status == 'success' && 'The deployment for the project mezenner-ci-cd was successful.' || 'The GitHub Actions pipeline for project mezenner-ci-cd has failed. Please check the logs for more details.' }}
-#
-#      - name: Slack Notification
-#        uses: 8398a7/action-slack@v3
-#        if: always()
-#        with:
-#          status: ${{ job.status }}
-#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-#          channel: '#tp-jinkins'
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Slack Notification
+        uses: 8398a7/action-slack@v3
+        if: always()
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          channel: '#tp-jinkins'
+        env:
+          SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
