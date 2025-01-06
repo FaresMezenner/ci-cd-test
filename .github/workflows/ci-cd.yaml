@@ -27,13 +27,13 @@ jobs:
           ./gradlew test --tests "acceptation.DeterminantCalculatorFeature"
           ./gradlew test
 
-#      - name: Publish Test Results
-#        uses: EnricoMi/publish-unit-test-result-action@v2
-#        if: always()
-#        with:
-#          files: |
-#            build/test-results/test/*.xml
-#            build/reports/cucumber/*.json
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            build/test-results/test/*.xml
+            build/reports/cucumber/*.json
 #
 #      - name: SonarQube Analysis
 #        env:
