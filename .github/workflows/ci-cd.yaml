@@ -121,12 +121,23 @@ jobs:
           to: faresmezenner@gmail.com
           body: ${{ job.status == 'success' && 'The deployment for the project mezenner-ci-cd was successful.' || 'The GitHub Actions pipeline for project mezenner-ci-cd has failed. Please check the logs for more details.' }}
 
-      - name: Slack Notification
-        uses: 8398a7/action-slack@v3
+      - name: Send Slack Notification
         if: always()
+        uses: slackapi/slack-github-action@v2.0.0
         with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-          channel: '#tp-jinkins'
+          # This input is renamed in v2.0.0
+          payload: |
+            {
+              "text": "*${{ github.workflow }}* workflow ${{ job.status }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*${{ github.workflow }}* workflow ${{ job.status }}\n\n*Repository:* ${{ github.repository }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}\n*Event:* ${{ github.event_name }}\n\n${{ job.status == 'success' && '✅ Pipeline succeeded!' || '❌ Pipeline failed!' }}"
+                  }
+                }
+              ]
+            }
         env:
           SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
