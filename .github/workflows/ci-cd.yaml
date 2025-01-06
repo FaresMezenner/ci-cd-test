@@ -116,6 +116,7 @@ jobs:
           server_port: 587
           username: lf_mezenner@esi.dz
           password: wzuz lpfj afkf iqlx
+          from: lf_mezenner@esi.dz
           subject: ${{ job.status == 'success' && 'Deployment Success - Project mezenner-ci-cd' || 'Pipeline Failed - Project mezenner-ci-cd' }}
           to: faresmezenner@gmail.com
           body: ${{ job.status == 'success' && 'The deployment for the project mezenner-ci-cd was successful.' || 'The GitHub Actions pipeline for project mezenner-ci-cd has failed. Please check the logs for more details.' }}
