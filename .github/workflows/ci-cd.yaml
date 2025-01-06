@@ -1,0 +1,92 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Test
+        run: |
+          ./gradlew test --tests "acceptation.DeterminantCalculatorFeature"
+          ./gradlew test
+
+#      - name: Publish Test Results
+#        uses: EnricoMi/publish-unit-test-result-action@v2
+#        if: always()
+#        with:
+#          files: |
+#            build/test-results/test/*.xml
+#            build/reports/cucumber/*.json
+#
+#      - name: SonarQube Analysis
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        run: |
+#          ./gradlew sonar \
+#            -Dsonar.projectKey=your-project-key \
+#            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+#
+#      - name: SonarQube Quality Gate
+#        uses: sonarsource/sonarqube-quality-gate-action@master
+#        timeout-minutes: 5
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        with:
+#          scanMetadataReportFile: .scannerwork/report-task.txt
+#
+#      - name: Build
+#        run: |
+#          ./gradlew jar
+#          ./gradlew javadoc
+#
+#      - name: Archive artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: build-artifacts
+#          path: |
+#            build/libs/*.jar
+#            build/docs/javadoc/
+#
+#      - name: Deploy
+#        run: ./gradlew publish
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Send Email Notification
+#        if: always()
+#        uses: dawidd6/action-send-mail@v3
+#        with:
+#          server_address: ${{ secrets.MAIL_SERVER }}
+#          server_port: 587
+#          username: ${{ secrets.MAIL_USERNAME }}
+#          password: ${{ secrets.MAIL_PASSWORD }}
+#          subject: ${{ job.status == 'success' && 'Deployment Success - Project mezenner-ci-cd' || 'Pipeline Failed - Project mezenner-ci-cd' }}
+#          to: faresmezenner@gmail.com
+#          body: ${{ job.status == 'success' && 'The deployment for the project mezenner-ci-cd was successful.' || 'The GitHub Actions pipeline for project mezenner-ci-cd has failed. Please check the logs for more details.' }}
+#
+#      - name: Slack Notification
+#        uses: 8398a7/action-slack@v3
+#        if: always()
+#        with:
+#          status: ${{ job.status }}
+#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+#          channel: '#tp-jinkins'
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
