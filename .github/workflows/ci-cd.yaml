@@ -64,33 +64,20 @@ jobs:
       - name: SonarQube Analysis
         env:
           SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
-          SONAR_HOST_URL: https://5fac-129-45-20-38.ngrok-free.app/
         run: |
-          ./gradlew sonarqube \
-          -Dsonar.projectKey=your-project-key \
-          -Dsonar.host.url=https://5fac-129-45-20-38.ngrok-free.app/ \
-          -Dsonar.login=squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd \
-          -Dsonar.qualitygate.wait=true
+          ./gradlew sonar \
+            -Dsonar.projectKey=mezenner-ci-cd \
+            -Dsonar.host.url=https://5fac-129-45-20-38.ngrok-free.app/ \
 
-      - name: SonarQube Quality Gate Check
-        run: |
-          REPORT_PATH=".scannerwork/report-task.txt"
-          if [ ! -f "$REPORT_PATH" ]; then
-            echo "Error: SonarQube report not found at $REPORT_PATH"
-            exit 1
-          fi
-          
-          SERVER_URL=$(cat $REPORT_PATH | grep serverUrl= | cut -d '=' -f2)
-          CE_TASK_ID=$(cat $REPORT_PATH | grep ceTaskId= | cut -d '=' -f2)
-          
-          # Wait for analysis to complete and get quality gate status
-          STATUS=$(curl -u "${{ secrets.SONAR_TOKEN }}:" "${SERVER_URL}/api/qualitygates/project_status?analysisId=${CE_TASK_ID}" | jq -r '.projectStatus.status')
-          
-          if [ "$STATUS" != "OK" ]; then
-            echo "Quality Gate failed with status: $STATUS"
-            exit 1
-          fi
-          echo "Quality Gate passed successfully"
+      # Check the Quality Gate status.
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        # Force to fail step after specific time.
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
+          SONAR_HOST_URL: https://5fac-129-45-20-38.ngrok-free.app/ #OPTIONAL
 #
 #      - name: Build
 #        run: |
