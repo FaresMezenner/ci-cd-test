@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  checks: write
+  pull-requests: write
+  contents: read
+
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
@@ -27,13 +32,16 @@ jobs:
           ./gradlew test --tests "acceptation.DeterminantCalculatorFeature"
           ./gradlew test
 
-      - name: Publish Test Results
+      - name: Publish JUnit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
-          files: |
-            build/test-results/test/*.xml
-            build/reports/cucumber/*.json
+          files: build/test-results/test/*.xml
+          check_name: "JUnit Test Results"
+          comment_mode: always
+          fail_on: "test failures"
+          job_summary: true
+          compare_to_earlier_commit: true
 #
 #      - name: SonarQube Analysis
 #        env:
