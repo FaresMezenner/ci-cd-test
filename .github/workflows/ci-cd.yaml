@@ -112,10 +112,10 @@ jobs:
         if: always()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.gmail.com
+          server_address: ${{ secrets.MAIL_SERVER }}
           server_port: 587
-          username: lf_mezenner@esi.dz
-          password: wzuz lpfj afkf iqlx
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
           from: lf_mezenner@esi.dz
           subject: ${{ job.status == 'success' && 'Deployment Success - Project mezenner-ci-cd' || 'Pipeline Failed - Project mezenner-ci-cd' }}
           to: faresmezenner@gmail.com
