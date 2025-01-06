@@ -42,71 +42,70 @@ jobs:
           ./gradlew test --tests "acceptation.DeterminantCalculatorFeature"
           ./gradlew test
 
-#      - name: Publish JUnit Test Results
-#        uses: EnricoMi/publish-unit-test-result-action@v2
-#        if: always()
-#        with:
-#          files: build/test-results/test/*.xml
-#          check_name: "JUnit Test Results"
-#          comment_mode: always
-#          fail_on: "test failures"
-#          job_summary: true
-#          compare_to_earlier_commit: true
+      - name: Publish JUnit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: build/test-results/test/*.xml
+          check_name: "JUnit Test Results"
+          comment_mode: always
+          fail_on: "test failures"
+          job_summary: true
+          compare_to_earlier_commit: true
+
+
+      - name: Publish Cucumber Report
+        if: always()
+        uses: deblockt/cucumber-report-annotations-action@v1.7
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          path: "build/reports/cucumber/*.json"
+
+
+      - name: Build project for sonarqube
+        run: |
+          ./gradlew build
+
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=mezenner-ci-cd
+            -Dsonar.java.binaries=build/classes/java/main
+            -Dsonar.java.sources=src/main/java
+            -Dsonar.java.tests=src/test/java
+        env:
+          SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
+          SONAR_HOST_URL: https://5fac-129-45-20-38.ngrok-free.app/
+
+      # Check the Quality Gate status.
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        # Force to fail step after specific time.
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
+          SONAR_HOST_URL: https://5fac-129-45-20-38.ngrok-free.app/ #OPTIONAL
+
+
+      - name: Build
+        run: |
+          ./gradlew jar
+          ./gradlew javadoc
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            build/libs/*.jar
+            build/docs/javadoc/
 #
-#
-#      - name: Publish Cucumber Report
-#        if: always()
-#        uses: deblockt/cucumber-report-annotations-action@v1.7
-#        with:
-#          access-token: ${{ secrets.GITHUB_TOKEN }}
-#          path: "build/reports/cucumber/*.json"
-#
-#
-#      - name: Build project for sonarqube
-#        run: |
-#          ./gradlew build
-#
-#
-#      - name: SonarQube Scan
-#        uses: sonarsource/sonarqube-scan-action@master
-#        with:
-#          projectBaseDir: .
-#          args: >
-#            -Dsonar.projectKey=mezenner-ci-cd
-#            -Dsonar.java.binaries=build/classes/java/main
-#            -Dsonar.java.sources=src/main/java
-#            -Dsonar.java.tests=src/test/java
-#        env:
-#          SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
-#          SONAR_HOST_URL: https://5fac-129-45-20-38.ngrok-free.app/
-#
-#      # Check the Quality Gate status.
-#      - name: SonarQube Quality Gate check
-#        id: sonarqube-quality-gate-check
-#        uses: sonarsource/sonarqube-quality-gate-action@master
-#        # Force to fail step after specific time.
-#        timeout-minutes: 5
-#        env:
-#          SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
-#          SONAR_HOST_URL: https://5fac-129-45-20-38.ngrok-free.app/ #OPTIONAL
-#
-#
-##
-#      - name: Build
-#        run: |
-#          ./gradlew jar
-#          ./gradlew javadoc
-##
-#      - name: Archive artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: build-artifacts
-#          path: |
-#            build/libs/*.jar
-#            build/docs/javadoc/
-##
-#      - name: Deploy
-#        run: ./gradlew publish
+      - name: Deploy
+        run: ./gradlew publish
 #
       - name: Send Email Notification
         if: always()
