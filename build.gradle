@@ -40,7 +40,7 @@ sonar {
 
     properties {
         property "sonar.projectKey", "mezenner-ci-cd"
-        property "sonar.host.url", "http://sonarqube-custom:9000/"
+        property "sonar.host.url", "https://5fac-129-45-20-38.ngrok-free.app/"
         property "sonar.java.binaries", "build/classes/java/main"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java"
@@ -48,17 +48,6 @@ sonar {
     }
 }
 
-sonarGithub {
-
-    properties {
-        property "sonar.projectKey", "mezenner-ci-cd"
-        property "sonar.host.url", "http://sonarqube-custom:9000/"
-        property "sonar.java.binaries", "build/classes/java/main"
-        property "sonar.sources", "src/main/java"
-        property "sonar.tests", "src/test/java"
-        property "sonar.token", "squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd"
-    }
-}
 
 publishing {
     repositories {
