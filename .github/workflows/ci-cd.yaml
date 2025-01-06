@@ -42,6 +42,14 @@ jobs:
           fail_on: "test failures"
           job_summary: true
           compare_to_earlier_commit: true
+
+
+      - name: Publish Cucumber Report
+        if: always()
+        uses: deblockt/cucumber-report-annotations-action@v1.7
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          path: "build/reports/cucumber/*.json"
 #
 #      - name: SonarQube Analysis
 #        env:
