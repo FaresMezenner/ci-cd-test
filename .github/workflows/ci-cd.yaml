@@ -72,6 +72,9 @@ jobs:
           projectBaseDir: .
           args: >
             -Dsonar.projectKey=mezenner-ci-cd
+            -Dsonar.java.binaries=build/classes/java/main
+            -Dsonar.java.sources=src/main/java
+            -Dsonar.java.tests=src/test/java
         env:
           SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
           SONAR_HOST_URL: https://5fac-129-45-20-38.ngrok-free.app/
