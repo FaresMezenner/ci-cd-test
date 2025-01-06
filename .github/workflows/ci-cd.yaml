@@ -126,7 +126,8 @@ jobs:
         uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK }}
-          webhook-type: webhook-trigger
+          webhook-type: incoming-webhook
           payload: |
-            status: "${{ job.status }}"
-            option: "false"
+            {
+              "text": "${{ job.status == 'success' && 'Deployment Success - Project mezenner-ci-cd' || 'Pipeline Failed - Project mezenner-ci-cd' }}"
+            }
