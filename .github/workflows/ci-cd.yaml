@@ -50,14 +50,14 @@ jobs:
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
           path: "build/reports/cucumber/*.json"
-#
-#      - name: SonarQube Analysis
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#        run: |
-#          ./gradlew sonar \
-#            -Dsonar.projectKey=your-project-key \
-#            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+
+      - name: SonarQube Analysis
+        env:
+          SONAR_TOKEN: squ_bb61b4f6aa352eb7bb43deac1540f1de2bae69dd
+        run: |
+          ./gradlew sonar \
+            -Dsonar.projectKey=mezenner-ci-cd \
+            -Dsonar.host.url=https://5fac-129-45-20-38.ngrok-free.app/ \
 #
 #      - name: SonarQube Quality Gate
 #        uses: sonarsource/sonarqube-quality-gate-action@master
