@@ -125,10 +125,10 @@ jobs:
         if: always()
         uses: slackapi/slack-github-action@v2.0.0
         with:
-    webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-    webhook-type: webhook-trigger
-    payload: |
-      status: "${{ job.status }}"
-      option: "false"
-    env:
-      SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
+          payload: |
+            status: "${{ job.status }}"
+            option: "false"
+          env:
+            SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
